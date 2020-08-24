@@ -7,6 +7,7 @@ GPIO.setmode(GPIO.BCM)
 import numpy as np
 import math
 from time import sleep
+from array import *
 
 left = 27
 right = 25
@@ -18,6 +19,7 @@ motor_01 = PWMOutputDevice(25)
 motor_10 = PWMOutputDevice(16)
 motor_11 = PWMOutputDevice(12)
 
+coordinates = [[0,1], [1,1], [2,2], [2,3]]
 motors = np.array([[27, 0, 0], [25, 0, 1], [16, 1, 0], [12, 1, 1]])
 
 intensity = [0,0,0,0]
@@ -53,8 +55,6 @@ def energy_function(motor_x, motor_y, touch_x, touch_y):
     
     previous_x = touch_x
     previous_y = touch_y
-    if amplitude == -1:
-        return amplitude = 0
     return amplitude
 
         
@@ -65,23 +65,76 @@ def stop_vibration():
             
 while True:
     amplitude = [0,0,0,0,0,0,0,0]
-    amplitude[0] = energy_function(0, 0, touch_x, touch_y)
-    amplitude[1] = energy_function(1, 0, touch_x, touch_y)
-    amplitude[2] = energy_function(2, 0, touch_x, touch_y)
-    amplitude[3] = energy_function(3, 0, touch_x, touch_y)
-    amplitude[4] = energy_function(0, 1, touch_x, touch_y)
-    amplitude[5] = energy_function(1, 1, touch_x, touch_y)
-    amplitude[6] = energy_function(2, 1, touch_x, touch_y)
-    amplitude[7] = energy_function(3, 1, touch_x, touch_y)
     
-    motor_00.value = amplitude[0]
-    motor_10.value = amplitude[1]
-    motor_20.value = amplitude[2]
-    motor_30.value = amplitude[3]
-    motor_01.value = amplitude[4]
-    motor_11.value = amplitude[5]
-    motor_21.value = amplitude[6]
-    motor_31.value = amplitude[7]
+    for i in range(4):
+        amplitude[0] = energy_function(0, 0, coordinates[i][0], coordinates[i][1])
+        amplitude[1] = energy_function(1, 0, coordinates[i][0], coordinates[i][1])
+        amplitude[2] = energy_function(2, 0, coordinates[i][0], coordinates[i][1])
+        amplitude[3] = energy_function(3, 0, coordinates[i][0], coordinates[i][1])
+        amplitude[4] = energy_function(0, 1, coordinates[i][0], coordinates[i][1])
+        amplitude[5] = energy_function(1, 1, coordinates[i][0], coordinates[i][1])
+        amplitude[6] = energy_function(2, 1, coordinates[i][0], coordinates[i][1])
+        amplitude[7] = energy_function(3, 1, coordinates[i][0], coordinates[i][1])
+        
+           
+          #motor_00.value = amplitude[0]
+           # motor_10.value = amplitude[1]
+            #motor_20.value = amplitude[2]
+            #motor_30.value = amplitude[3]
+            #motor_01.value = amplitude[4]
+            #motor_11.value = amplitude[5]
+            #motor_21.value = amplitude[6]
+            #motor_31.value = amplitude[7]
+            
+        if amplitude[0] == -1:
+            motor_00.value = 0
+            time.sleep(0.03)
+        else:
+            motor_00.value = amplitude[0]
+            
+        if amplitude[1] == -1:
+            motor_10.value = 0
+            time.sleep(0.03)
+        else:
+            motor_10.value = amplitude[1]
+            
+        if amplitude[2] == -1:
+            motor_20.value = 0
+            time.sleep(0.03)
+        else:
+            motor_20.value = amplitude[2]
+            
+        if amplitude[3] == -1:
+            motor_30.value = 0
+            time.sleep(0.03)
+        else:
+            motor_30.value = amplitude[3]
+            
+        if amplitude[4] == -1:
+            motor_01.value = 0
+            time.sleep(0.03)
+        else:
+            motor_01.value = amplitude[4]
+            
+        if amplitude[5] == -1:
+            motor_11.value = 0
+            time.sleep(0.03)
+        else:
+            motor_11.value = amplitude[5]
+            
+        if amplitude[6] == -1:
+            motor_21.value = 0
+            time.sleep(0.03)
+        else:
+            motor_21.value = amplitude[6]
+            
+        if amplitude[7] == -1:
+            motor_31.value = 0
+            time.sleep(0.03)
+        else:
+            motor_31.value = amplitude[7]
+        
+
     
     
     
