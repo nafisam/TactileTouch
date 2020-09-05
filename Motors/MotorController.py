@@ -87,21 +87,18 @@ def energy_function(motor_x, motor_y, touch_x, touch_y):
         previous_y = touch_y
         return 0
     x = (motor_x-touch_x)
+    if -0.01 < x < 0.01:
+        return 100
     if x <= -1 or x >= 1:
         previous_x = touch_x
         previous_y = touch_y
         amplitude = 0
         return amplitude
     y = motor_y-touch_y
-    if 0.498 < x < 0.523 or -0.498 > x > -0.523:
-        amplitude = -1
-        return amplitude
+
 
     if -0.01 < y < 0.01: 
-        print("should be negatve")
-        print(motor_x, motor_y, touch_x, touch_y)
-        print (motor_y-touch_y)
-        return -1
+        return 100
     
     
     beta_x = abs(motor_x-touch_x)
@@ -118,7 +115,8 @@ def energy_function(motor_x, motor_y, touch_x, touch_y):
         #print(y)
         phantom_h_x = math.sqrt(1-beta_x) * 1
         if -0.01 < y < 0.01:
-            amplitude = -1
+            amplitude = 100
+            return amplitude
         elif y <= 0:
             amplitude = math.sqrt(abs(1-beta_y)) * phantom_h_x
         elif y > 0:
@@ -151,18 +149,19 @@ def get_data():
 previous_x = -2
 previous_y = -2
 i = 0
-while True:
-    i = i +1
-    amplitude_array = [0,0,0,0,0,0,0,0]
+amplitude_array = [0,0,0,0,0,0,0,0,0]
+naf = 0
+
+while True:   
     sock.setblocking(0)
-    ready = select.select([sock], [], [], 5)
+    ready = select.select([sock], [], [], 2)
     if ready[0]:
         data, addr = sock.recvfrom(1024)
         print data
-        file1 = open("results.txt", "a")
-        file1.write("Test Number:" + str(i) + "\n")
+        file1 = open("go_to_middle_then_back_to_left", "a")
+        #file1.write("Test Number:" + str(1) + "\n")
         file1.write(data)
-        file1.write("\n\n\n")
+        file1.write("\n")
         #x, y= map(float, data.strip('()').split(','))
         x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6, x7, y7, x8, y8, x9, y9, x10, y10 = map(float, data.strip('()').replace('(','').replace(')','').split(','))
 
@@ -228,12 +227,13 @@ while True:
                              energy_function(3, 1, x4, y4), energy_function(3, 1, x5, y5), energy_function(3, 1, x6, y6), \
                              energy_function(3, 1, x7, y7), energy_function(3, 1, x8, y8), energy_function(3, 1, x9, y9), \
                              energy_function(3, 1, x10, y10))
+    amplitude_array[8]=energy_function(0,0,1.0566666,1.5033333)
     
         
     
     
     
-    for j in range (8):
+    for j in range (9):
         print amplitude_array[j]
         if amplitude_array[j] == -1:
             print("I AM NEGATIVE BITCHES ANDS TOP")
@@ -252,19 +252,19 @@ while True:
     
 #motor_31.value = amplitude[7]
     
-    if amplitude_array[0] == -1:
+    if amplitude_array[0] == 100:
         motor_00.value = 0
         print("sleeping")
         print("sleeping")
         print("sleeping")
         print("sleeping\n\n\n\n\n\n\n\n\n\n")
-        time.sleep(0.3)
+        time.sleep(0.03)
     else:
         print("i am vibrating 00")
         print("Amplitude 0 " + str(amplitude_array[0]) + " please fucking work\n")
         motor_00.value = amplitude_array[0]
         
-    if amplitude_array[1] == -1:
+    if amplitude_array[1] == 100:
         motor_10.value = 0
         time.sleep(0.03)
     else:
@@ -273,7 +273,7 @@ while True:
 #         print("i am vibrating 10")
         motor_10.value = amplitude_array[1]
         
-    if amplitude_array[2] == -1:
+    if amplitude_array[2] == 100:
         motor_20.value = 0
         time.sleep(0.03)
     else:
@@ -282,7 +282,7 @@ while True:
 #         print("i am vibrating 20")
         motor_20.value = amplitude_array[2]
         
-    if amplitude_array[3] == -1:
+    if amplitude_array[3] == 100:
         motor_30.value = 0
         time.sleep(0.03)
     else:
@@ -291,7 +291,7 @@ while True:
 #         print("i am vibrating 30")
         motor_30.value = amplitude_array[3]
         
-    if amplitude_array[4] == -1:
+    if amplitude_array[4] == 100:
         motor_01.value = 0
         print("sleeping")
         print("sleeping")
@@ -304,7 +304,7 @@ while True:
 #         print("i am vibrating 01")
         motor_01.value = amplitude_array[4]
         
-    if amplitude_array[5] == -1:
+    if amplitude_array[5] == 100:
         motor_11.value = 0
         time.sleep(0.03)
     else:
@@ -313,7 +313,7 @@ while True:
 #         print("i am vibrating 11")
         motor_11.value = amplitude_array[5]
         
-    if amplitude_array[6] == -1:
+    if amplitude_array[6] == 100:
         motor_21.value = 0
         time.sleep(0.03)
     else:
@@ -322,7 +322,7 @@ while True:
 #         print("i am vibrating 21")
         motor_21.value = amplitude_array[6]
         
-    if amplitude_array[7] == -1:
+    if amplitude_array[7] == 100:
         motor_31.value = 0
         time.sleep(0.03)
     else:
