@@ -11,6 +11,9 @@ import struct
 from struct import *
 import select
 import sys
+#adding i2c imports
+from board import SCL, SDA 
+import busio
 
 # Prepare the UDP connection
 UDP_IP = "10.0.0.99"
@@ -40,7 +43,17 @@ motor_GPIO = [17, 27, 12, 5, 21, 16, 22, 13]
 # motor_10 = PWMLED(16)
 # motor_20 = PWMLED(22)
 # motor_30 = PWMLED(13)
+# Import the PCA9685 module.
+from adafruit_pca9685 import PCA9685
 
+# Create the I2C bus interface.
+i2c_bus = busio.I2C(SCL, SDA)
+
+# Create a simple PCA9685 class instance.
+pca = PCA9685(i2c_bus)
+
+# Set the PWM frequency to 60hz.
+pca.frequency = 60
 
 motor_31 = PWMLED(17)
 motor_21 = PWMLED(27)
@@ -143,7 +156,10 @@ def energy_function(motor_x, motor_y, touch_x, touch_y):
     
     previous_x = touch_x
     previous_y = touch_y
-    return amplitude
+    #adding hexademical conversion
+    decimal_amplitude = round(65535 * amplitude)
+    hex_conversion_amp = hex(decimal_amplitude)
+    return hex_conversion_amp
 
 def get_data():
     print("entered data")
@@ -237,6 +253,7 @@ while True:
         
         if amplitude_array[0] == 100:
             motor_00.value = 0
+            pca.channels[0].duty_cycle = 0x0000
 #             print("sleeping")
 #             print("sleeping")
 #             print("sleeping")
@@ -249,6 +266,7 @@ while True:
             
         if amplitude_array[1] == 100:
             motor_10.value = 0
+            pca.channels[1].duty_cycle = 0x0000
             time.sleep(0.03)
         else:
             motor_10.value = 0
@@ -258,6 +276,7 @@ while True:
             
         if amplitude_array[2] == 100:
             motor_20.value = 0
+            pca.channels[2].duty_cycle = 0x0000
             time.sleep(0.03)
         else:
             motor_20.value = 0
@@ -267,6 +286,7 @@ while True:
             
         if amplitude_array[3] == 100:
             motor_30.value = 0
+            pca.channels[3].duty_cycle = 0x0000
             time.sleep(0.03)
         else:
             motor_30.value = 0
@@ -276,6 +296,7 @@ while True:
             
         if amplitude_array[4] == 100:
             motor_01.value = 0
+            pca.channels[4].duty_cycle = 0x0000
 #             print("sleeping")
 #             print("sleeping")
 #             print("sleeping")
@@ -289,6 +310,7 @@ while True:
             
         if amplitude_array[5] == 100:
             motor_11.value = 0
+            pca.channels[5].duty_cycle = 0x0000
             time.sleep(0.03)
         else:
             motor_11.value = 0
@@ -298,6 +320,7 @@ while True:
             
         if amplitude_array[6] == 100:
             motor_21.value = 0
+            pca.channels[6].duty_cycle = 0x0000
             time.sleep(0.03)
         else:
             motor_21.value = 0
@@ -307,6 +330,7 @@ while True:
             
         if amplitude_array[7] == 100:
             motor_31.value = 0
+            pca.channels[7].duty_cycle = 0x0000
             time.sleep(0.03)
         else:
             motor_31.value = 0
