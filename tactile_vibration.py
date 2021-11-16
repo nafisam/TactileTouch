@@ -174,7 +174,7 @@ while True:
         #We first get messages of how many fingers are down or if a finger was released
         #We don't do anything with these messages so we just ignore them
         if data == "0,down" or data == "1,down" or data == "2,down" or data == "3,down" or data == "4,down" or data == "5,down" or data == "6,down" or data == "7,down" or data == "8,down" or data == "9,down" or data == "up":
-            print ("i'm in the if loop")
+            print ("Data Received")
             continue
 
         
